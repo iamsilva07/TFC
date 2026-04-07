@@ -1,0 +1,63 @@
+import os
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
+from sqlalchemy.orm import Session
+from app.db.database import get_db
+from app.models.user import User
+from app.models.document import Document
+from app.schemas.document import DocumentOut
+from app.api.deps import get_current_user
+
+router = APIRouter(prefix="/documents", tags=["documents"])
+
+UPLOAD_DIR = "./uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+@router.post("/upload", response_model=DocumentOut, status_code=201)
+async def upload_document(
+    file:UploadFile = File(...),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    extension = file.filename.split(".")[-1].lower()
+    if extension not in ["pdf", "docx", "txt"]:
+        raise HTTPException(status_code=400, detail="Solo se admiten PDF, DOCX y TXT")
+
+    file_path = f"{UPLOAD_DIR}/{current_user.id}_{file.filename}"
+    with open (file_path, "wb") as f:
+        f.write(await file.read())
+
+    doc = Document(
+        user_id = current_user.id,
+        title = file.filename.rsplit(".", 1)[0],
+        file_path = file_path,
+        file_type = extension
+    )
+    db.add(doc)
+    db.commit()
+    db.refresh(doc)
+
+    return doc
+
+@router.get("/", response_model=list[DocumentOut])
+def list_documents(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return db.query(Document).filter(Document.user_id == current_user.id).all()
+
+
+@router.delete("/{doc_id}", status_code=204)
+def delete_document(
+    doc_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    doc = db.query(Document).filter(
+        Document.id == doc_id,
+        Document.user_ == current_user.id
+    ).first
+    if not doc:
+        raise HTTPException(status_code=404, detail="Documento no encontrado")
+    db.delete(doc)
+    db.commit()
+
