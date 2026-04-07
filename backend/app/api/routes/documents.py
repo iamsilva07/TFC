@@ -4,8 +4,9 @@ from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.models.user import User
 from app.models.document import Document
-from app.schemas.document import DocumentOut
+from app.schemas.document import DocumentOut, ChatRequest, ChatResponse
 from app.api.deps import get_current_user
+from app.services import rag
 
 router = APIRouter(prefix="/documents", tags=["documents"])
 
@@ -33,8 +34,11 @@ async def upload_document(
         file_type = extension
     )
     db.add(doc)
-    db.commit()
+    db.commit() 
     db.refresh(doc)
+
+    text = rag.extract_text(file_path, extension)
+    rag.index_document(current_user.id, doc.id, text, doc.title)
 
     return doc
 
@@ -54,10 +58,20 @@ def delete_document(
 ):
     doc = db.query(Document).filter(
         Document.id == doc_id,
-        Document.user_ == current_user.id
+        Document.user_id == current_user.id
     ).first
     if not doc:
         raise HTTPException(status_code=404, detail="Documento no encontrado")
     db.delete(doc)
     db.commit()
+
+@router.post("/chat", response_model=ChatResponse)
+def chat(
+    request: ChatRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    context, sources = rag.search_documents(current_user.id, request.question, request.doc_id)
+    answer = rag.ask(context, request.question)
+    return ChatResponse(answer=answer, sources=sources)
 
