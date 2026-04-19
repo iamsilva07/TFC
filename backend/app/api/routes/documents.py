@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.models.user import User
 from app.models.document import Document
-from app.schemas.document import DocumentOut, ChatRequest, ChatResponse
+from app.models.chat import ChatMessage
+from app.schemas.document import DocumentOut, ChatRequest, ChatResponse, ChatMessageOut
 from app.api.deps import get_current_user
 from app.services import rag
 
@@ -74,4 +75,13 @@ def chat(
     context, sources = rag.search_documents(current_user.id, request.question, request.doc_id)
     answer = rag.ask(context, request.question)
     return ChatResponse(answer=answer, sources=sources)
+
+@router.get("/chat/history", response_model=list[ChatMessageOut])
+def get_chat_history(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    return db.query(ChatMessage).filter(
+        ChatMessage.user_id == current_user.id
+    ).order_by(ChatMessage.created_at).all()
 

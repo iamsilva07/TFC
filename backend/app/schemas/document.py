@@ -16,3 +16,12 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     answer: str
     sources: list[str] = []
+
+class ChatMessageOut(BaseModel):
+    id: int
+    question: str
+    answer: str
+    document_id: int | None
+    created_at: datetime
+
+    model_config = {"from_attributes": True}

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.database import Base, engine
-from app.models import user, document
+from app.models import user, document, chat
 from app.api.routes import auth, documents
  
 
