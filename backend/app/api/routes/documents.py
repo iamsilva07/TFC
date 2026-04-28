@@ -74,6 +74,17 @@ def chat(
 ):
     context, sources = rag.search_documents(current_user.id, request.question, request.doc_id)
     answer = rag.ask(context, request.question)
+ 
+
+    message = ChatMessage(
+        user_id = current_user.id,
+        document_id = request.doc_id,
+        question = request.question,
+        answer=answer
+    )
+    db.add(message)
+    db.commit()
+
     return ChatResponse(answer=answer, sources=sources)
 
 @router.get("/chat/history", response_model=list[ChatMessageOut])

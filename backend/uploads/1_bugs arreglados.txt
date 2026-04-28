@@ -1,0 +1,5 @@
+Fichero,Variable rota,Causa,Corrección
+compras_online.py, recurrencia_compras_online, 0 dentro de paréntesis crea tupla, Eliminar 0 de cada paréntesis
+ingresos_despido.py, ingresos_despido, Sin filtro de positivos sin /months, Añadir aux.amount > 0 y / months
+ingresos_despido.py, tiene_ingresos_despido, Consecuencia del bug anterior, Se arregla solo al corregir el anterior
+propiedad.py, paga_residencia, Categoría "vivienda_residencias" no existe debe ser "gastos de vivienda_residencias", Corregir el string de la categoria
