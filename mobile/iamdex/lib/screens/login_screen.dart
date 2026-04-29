@@ -14,13 +14,13 @@ class _LoginScreenState extends State<LoginScreen> {
     final _emailController = TextEditingController();
     final _passwordController = TextEditingController();
     bool _isLoading = false;
-    String? error='';
+    String? _error='';
     
 
     Future<void> _login() async {
         setState(() {
             _isLoading=true;
-            error='';
+            _error='';
         });
 
         final result = await AuthService.login(
@@ -38,8 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
             }
         } else{
             setState((){
-                
-                error= result['detail'] ?? 'Error al iniciar sesion';
+                _error= result['detail'] ?? 'Error al iniciar sesion';
             });
         }
         setState (() => _isLoading = false);
@@ -59,16 +58,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _emailController,
                     decoration: const InputDecoration(labelText: 'Email'),
                     keyboardType: TextInputType.emailAddress
-                )
+                ),
                 const SizedBox(height: 16),
-                TextFormField(
+                TextField(
                     controller: _passwordController,
                     decoration: const InputDecoration(labelText: 'Contraseña'),
                     obscureText: true,
                 ),
                 const SizedBox(height: 24),
                 if(_error != null)
-                    Text(_error!, style: const TextStyle(colors: Colors.red)),
+                    Text(_error!, style: const TextStyle(color: Colors.red)),
                 const SizedBox (height: 8),
                 SizedBox(
                     width: double.infinity,
