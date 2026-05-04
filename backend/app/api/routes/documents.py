@@ -60,7 +60,7 @@ def delete_document(
     doc = db.query(Document).filter(
         Document.id == doc_id,
         Document.user_id == current_user.id
-    ).first
+    ).first()
     if not doc:
         raise HTTPException(status_code=404, detail="Documento no encontrado")
     db.delete(doc)

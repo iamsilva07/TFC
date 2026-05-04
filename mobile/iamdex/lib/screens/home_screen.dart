@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'login_screen.dart';
+import 'documents_screen.dart';
 
 class HomeScreen extends StatelessWidget{
     const HomeScreen({super.key});
@@ -25,8 +26,32 @@ class HomeScreen extends StatelessWidget{
                     ),
                 ],
             ),
-            body: const Center(
-                child: Text('Bienvenido a IAMDEX'),
+            body: Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                        const Icon(Icons.description, size:80, color: Colors.blue),
+                        const SizedBox(height: 24),
+                        const Text(
+                            'Bienvenido a IAMDEX',
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                            'Tu asistente de documentos con IA',
+                            style: TextStyle(color: Colors.grey),
+                        ),
+                        const SizedBox(height: 40),
+                        ElevatedButton.icon(
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const DocumentsScreen()),
+                            ),
+                            icon: const Icon(Icons.folder_open),
+                            label: const Text('Mis documentos'),
+                        ),
+                    ],
+                ),
             ),
         );
     }

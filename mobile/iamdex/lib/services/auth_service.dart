@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../utils/constant.dart';
+import '../utils/constants.dart';
 
 class AuthService {
     static Future<Map<String, dynamic>> register(String name, String email, String password) async {
         final response = await http.post(
-            Uri.parse('${Constant.baseUrl}/auth/register'),
+            Uri.parse('${Constants.baseUrl}/auth/register'),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({
                 'name': name,
@@ -19,7 +19,7 @@ class AuthService {
 
     static Future<Map<String, dynamic>> login(String email, String password) async {
         final response = await http.post(
-            Uri.parse('${Constant.baseUrl}/auth/login'),
+            Uri.parse('${Constants.baseUrl}/auth/login'),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({
                 'email': email,
