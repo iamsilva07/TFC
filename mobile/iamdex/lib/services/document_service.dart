@@ -67,4 +67,22 @@ class DocumentService{
         );
         return jsonDecode(response.body);
     }
+
+    static Future <List<dynamic>> getChatHistory() async{
+        final headers = await _headers();
+        final response = await http.get(
+            Uri.parse('${Constants,baseUrl}/documents/chat/history'),
+            headers: headers,
+        );
+        return jsonDecode(response.body);
+    }
+
+    static Future<bool> deleteChatHistory() async{
+        final headers = await _headers();
+        final response = await http.delete(
+            Uri.parse('${Constants.baseUrl}/documents/chat/history'),
+            headers: headers,
+        );
+        return response.statusCode == 204;
+    }
 }
