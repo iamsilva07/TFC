@@ -14,6 +14,7 @@ class AuthService {
                 'password': password
             }),
         );
+        print('Register response: ${response.statusCode} - ${response.body}');
         return jsonDecode(response.body);
     }
 
@@ -26,6 +27,7 @@ class AuthService {
                 'password': password
             }),
         );
+        
         return jsonDecode(response.body);
     }
 
