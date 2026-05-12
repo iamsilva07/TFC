@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import 'login_screen.dart';
 import 'documents_screen.dart';
+import 'history_screen.dart';
 
 class HomeScreen extends StatelessWidget{
     const HomeScreen({super.key});
@@ -49,6 +50,15 @@ class HomeScreen extends StatelessWidget{
                             ),
                             icon: const Icon(Icons.folder_open),
                             label: const Text('Mis documentos'),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton.icon(
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const HistoryScreen()),
+                            ),
+                            icon: const Icon(Icons.history),
+                            label: const Text('Historial de chat'),
                         ),
                     ],
                 ),

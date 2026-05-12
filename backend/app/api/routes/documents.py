@@ -96,3 +96,41 @@ def get_chat_history(
         ChatMessage.user_id == current_user.id
     ).order_by(ChatMessage.created_at).all()
 
+@router.delete("/chat/history", status_code=204)
+def delete_chat_history(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    db.query(ChatMessage).filter(
+        ChatMessage.user_id == current_user.id
+    ).delete()
+    db.commit()
+
+@router.delete("/chat/history/{message_id}", status_code=204)
+def delete_chat_message(
+    message_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    message = db.query(ChatMessage).filter(
+        ChatMessage.id == message_id,
+        ChatMessage.user_id == current_user.id
+    ).first()
+    if not message:
+        raise HTTPException(status_code=404, detail="Mensaje no encontrado")
+    db.delete(message)
+    db.commit()
+
+@router.get("/{doc_id}", response_model=DocumentOut)
+def get_document(
+    doc_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    doc = db.query(Document).filter(
+        Document.id == doc_id,
+        Document.user_id == current_user.id
+    ).first()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Documento no encontrado")
+    return doc

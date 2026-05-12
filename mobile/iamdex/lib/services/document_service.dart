@@ -71,7 +71,7 @@ class DocumentService{
     static Future <List<dynamic>> getChatHistory() async{
         final headers = await _headers();
         final response = await http.get(
-            Uri.parse('${Constants,baseUrl}/documents/chat/history'),
+            Uri.parse('${Constants.baseUrl}/documents/chat/history'),
             headers: headers,
         );
         return jsonDecode(response.body);
@@ -85,4 +85,23 @@ class DocumentService{
         );
         return response.statusCode == 204;
     }
+
+    static Future<bool> deleteChatMessage(int messageId) async {
+        final headers = await _headers();
+        final response = await http.delete(
+            Uri.parse('${Constants.baseUrl}/documents/chat/history/$messageId'),
+            headers: headers,
+        );
+        return response.statusCode == 204;
+    }
+    
+    static Future<Map<String, dynamic>> getDocument(int id) async {
+        final headers = await _headers();
+        final response = await http.get(
+            Uri.parse('${Constants.baseUrl}/documents/$id'),
+            headers: headers,
+        );
+        return jsonDecode(response.body);
+    }
+
 }

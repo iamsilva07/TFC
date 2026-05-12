@@ -11,10 +11,18 @@ class ChatScreen extends StatefulWidget{
     State<ChatScreen> createState() => _ChatScreenState();
 }
 
+
+
 class _ChatScreenState extends State<ChatScreen>{
     final _questionController = TextEditingController();
     final List<Map<String, String>> _messages = [];
     bool _isLoading = false;
+
+    @override
+    void initState() {
+        super.initState();
+        _loadPreviousMessages();
+    }
 
     Future<void> _sendMessage() async{
         final question = _questionController.text.trim();
@@ -34,6 +42,17 @@ class _ChatScreenState extends State<ChatScreen>{
                 'content': result['answer'] ?? 'Error al obtener respuesta',
             });
             _isLoading = false;
+        });
+    }
+
+    Future<void> _loadPreviousMessages() async {
+        final history = await DocumentService.getChatHistory();
+        final filtered = history.where((m) => m['document_id'] == widget.docId).toList();
+        setState(() {
+            for (var m in filtered) {
+            _messages.add({'role': 'user', 'content': m['question']});
+            _messages.add({'role': 'assistant', 'content': m['answer']});
+            }
         });
     }
 
