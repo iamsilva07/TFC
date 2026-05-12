@@ -15,6 +15,7 @@ class AuthService {
             }),
         );
         print('Register response: ${response.statusCode} - ${response.body}');
+        print('URL: ${Constants.baseUrl}/auth/register');
         return jsonDecode(response.body);
     }
 
