@@ -95,7 +95,7 @@ class DocumentService{
         return response.statusCode == 204;
     }
     
-    static Future<List<dynamic>> getDocuments() async {
+    static Future<List<dynamic>> getDocument() async {
         final headers = await _headers();
         final response = await http.get(
             Uri.parse('${Constants.baseUrl}/documents'),
