@@ -20,7 +20,10 @@ class DocumentService{
             Uri.parse('${Constants.baseUrl}/documents'),
             headers: headers,
         );
-        return jsonDecode(response.body);
+        print('Documents: ${response.statusCode} - ${response.body}');
+        final decoded = jsonDecode(response.body);
+        if (decoded is List) return decoded;
+        return [];
     }
 
     static Future<bool> uploadDocument() async{
@@ -95,16 +98,16 @@ class DocumentService{
         return response.statusCode == 204;
     }
     
-    static Future<List<dynamic>> getDocument() async {
+    static Future<Map<String, dynamic>> getDocument(int id) async {
         final headers = await _headers();
         final response = await http.get(
-            Uri.parse('${Constants.baseUrl}/documents'),
+            Uri.parse('${Constants.baseUrl}/documents/$id'),
             headers: headers,
         );
-        print('Documents response: ${response.statusCode} - ${response.body}');
+        print('Document response: ${response.statusCode} - ${response.body}');
         final decoded = jsonDecode(response.body);
-        if (decoded is List) return decoded;
-        return [];
+        if (decoded is Map) return decoded;
+        return {};
     }
 
 }
