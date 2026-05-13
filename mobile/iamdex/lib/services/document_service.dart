@@ -102,7 +102,9 @@ class DocumentService{
             headers: headers,
         );
         print('Documents response: ${response.statusCode} - ${response.body}');
-        return jsonDecode(response.body);
+        final decoded = jsonDecode(response.body);
+        if (decoded is List) return decoded;
+        return [];
     }
 
 }
