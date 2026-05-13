@@ -17,10 +17,9 @@ class DocumentService{
     static Future<List<dynamic>> getDocuments() async{
         final headers = await _headers();
         final response = await http.get(
-            Uri.parse('${Constants.baseUrl}/documents'),
+            Uri.parse('${Constants.baseUrl}/documents/'),
             headers: headers,
         );
-        print('Documents: ${response.statusCode} - ${response.body}');
         final decoded = jsonDecode(response.body);
         if (decoded is List) return decoded;
         return [];
@@ -104,9 +103,9 @@ class DocumentService{
             Uri.parse('${Constants.baseUrl}/documents/$id'),
             headers: headers,
         );
-        print('Document response: ${response.statusCode} - ${response.body}');
+        
         final decoded = jsonDecode(response.body);
-        if (decoded is Map) return decoded;
+        if (decoded is Map) return Map<String, dynamic>.from(decoded);
         return {};
     }
 

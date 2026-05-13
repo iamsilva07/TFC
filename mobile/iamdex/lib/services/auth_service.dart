@@ -14,8 +14,7 @@ class AuthService {
                 'password': password
             }),
         );
-        print('Register response: ${response.statusCode} - ${response.body}');
-        print('URL: ${Constants.baseUrl}/auth/register');
+        
         return jsonDecode(response.body);
     }
 
@@ -28,8 +27,7 @@ class AuthService {
                 'password': password
             }),
         );
-        print('Login URL: ${Constants.baseUrl}/auth/login');
-        print('Login response: ${response.statusCode} - ${response.body}');
+        
         return jsonDecode(response.body);
     }
 
