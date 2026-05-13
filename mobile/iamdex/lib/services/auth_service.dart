@@ -28,7 +28,8 @@ class AuthService {
                 'password': password
             }),
         );
-        
+        print('Login URL: ${Constants.baseUrl}/auth/login');
+        print('Login response: ${response.statusCode} - ${response.body}');
         return jsonDecode(response.body);
     }
 
