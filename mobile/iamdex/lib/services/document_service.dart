@@ -101,6 +101,7 @@ class DocumentService{
             Uri.parse('${Constants.baseUrl}/documents/$id'),
             headers: headers,
         );
+        print('Documents response: ${response.statusCode} - ${response.body}');
         return jsonDecode(response.body);
     }
 
