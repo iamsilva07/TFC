@@ -20,3 +20,8 @@ class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
     user: UserOut
+
+class UpdateProfile(BaseModel):
+    name: str | None = None
+    current_password: str | None = None
+    new_password: str | None = None

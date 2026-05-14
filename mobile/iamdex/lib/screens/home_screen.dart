@@ -4,6 +4,7 @@ import 'login_screen.dart';
 import 'documents_screen.dart';
 import 'history_screen.dart';
 import 'chat_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatelessWidget{
     const HomeScreen({super.key});
@@ -60,6 +61,15 @@ class HomeScreen extends StatelessWidget{
                             ),
                             icon: const Icon(Icons.history),
                             label: const Text('Historial de chat'),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton.icon(
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                            ),
+                            icon: const Icon(Icons.person),
+                            label: const Text('Mi perfil'),
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton.icon(

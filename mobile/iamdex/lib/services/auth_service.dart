@@ -45,4 +45,21 @@ class AuthService {
         final prefs = await SharedPreferences.getInstance();
         await prefs.remove('token');
     }
+
+    static Future<bool> updateProfile({String? name, String? currentPassword, String? newPassword}) async {
+        final token = await getToken();
+        final response = await http.put(
+            Uri.parse('${Constants.baseUrl}/auth/profile'),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer $token',
+            },
+            body: jsonEncode({
+                if (name != null) 'name': name,
+                if (currentPassword != null) 'current_password': currentPassword,
+                if (newPassword != null) 'new_password': newPassword,
+            }),
+        );
+        return response.statusCode == 200;
+    }
 }
