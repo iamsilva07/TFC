@@ -57,7 +57,7 @@ def search_documents(user_id: int, question: str, doc_id: int | None = None, n_r
 
     results = collection.query(
         query_texts=[question],
-        n_results=n_results,
+        n_results=8,
         where=where
     )
 
@@ -75,7 +75,7 @@ def ask(context: str, question: str) -> str:
         messages=[
             {
             "role":"system",
-            "content": "Eres un asistente que responde preguntas básandote SOLO en el contexto proporcionado. Si la respuesta no está en el contexto, dilo claramente."
+            "content": "Eres un asistente que responde preguntas basándote SOLO en el contexto proporcionado. Puedes comparar información de diferentes fuentes si está disponible en el contexto. Si la respuesta no está en el contexto, dilo claramente."
             },
             {
                 "role":"user",
