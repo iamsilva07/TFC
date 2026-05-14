@@ -26,7 +26,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
     final Map<int, List<dynamic>> grouped = {};
     for (var message in history) {
-      final docId = message['document_id'] as int;
+      final docId = message['document_id'] as int? ?? 0;
       grouped.putIfAbsent(docId, () => []).add(message);
     }
 
