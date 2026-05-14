@@ -3,6 +3,7 @@ import '../services/auth_service.dart';
 import 'login_screen.dart';
 import 'documents_screen.dart';
 import 'history_screen.dart';
+import 'chat_screen.dart';
 
 class HomeScreen extends StatelessWidget{
     const HomeScreen({super.key});
@@ -59,6 +60,20 @@ class HomeScreen extends StatelessWidget{
                             ),
                             icon: const Icon(Icons.history),
                             label: const Text('Historial de chat'),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton.icon(
+                            onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const ChatScreen(
+                                        docId: 0,
+                                        docTitle: 'Todos los documentos',
+                                    ),
+                                ),
+                            ),
+                            icon: const Icon(Icons.chat),
+                            label: const Text('Chat general'),
                         ),
                     ],
                 ),

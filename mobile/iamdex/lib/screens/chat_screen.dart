@@ -34,7 +34,7 @@ class _ChatScreenState extends State<ChatScreen>{
         });
         _questionController.clear();
 
-        final result = await DocumentService.chat(question, docId: widget.docId);
+        final result = await DocumentService.chat(question, docId: widget.docId == 0 ? null : widget.docId);
 
         setState((){
             _messages.add({
@@ -47,7 +47,7 @@ class _ChatScreenState extends State<ChatScreen>{
 
     Future<void> _loadPreviousMessages() async {
         final history = await DocumentService.getChatHistory();
-        final filtered = history.where((m) => m['document_id'] == widget.docId).toList();
+        final filtered = widget.docId == 0 ? history : history.where((m) => m['document_id'] == widget.docId).toList();
         setState(() {
             for (var m in filtered) {
             _messages.add({'role': 'user', 'content': m['question']});
