@@ -38,8 +38,30 @@ class _DocumentsScreenState extends State<DocumentsScreen>{
     }
 
     Future<void> _deleteDocument(int id) async{
-        final success = await DocumentService.deleteDocument(id);
-        if (success) await _loadDocuments();
+        final confirm = await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+                title: const Text('Eliminar documento'),
+                content: const Text('¿Estás seguro de que quieres eliminar este documento?'),
+                actions: [
+                    TextButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: const Text('Cancelar'),
+                    ),
+                    TextButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        child: const Text('Eliminar', style: TextStyle(color: Colors.red)),
+                    ),
+                ],
+            ),
+        );
+
+        if (confirm == true){
+            final success = await DocumentService.deleteDocument(id);
+            if (success) {
+                await _loadDocuments();
+            }
+        }
     }
 
     @override
