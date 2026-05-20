@@ -29,6 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
         if (result.containsKey("access_token")){
             await AuthService.saveToken(result["access_token"]);
+            await AuthService.saveName(result['user']['name']);
             if (mounted){
                 Navigator.pushReplacement(
                     context,
