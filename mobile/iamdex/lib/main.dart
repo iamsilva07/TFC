@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:iamdex/screens/login_screen.dart';
 import 'package:iamdex/screens/home_screen.dart';
 import 'package:iamdex/services/auth_service.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   final token = await AuthService.getToken();
+  FlutterNativeSplash.remove();
   runApp(MyApp(isLoggedIn: token != null));
 }
 
