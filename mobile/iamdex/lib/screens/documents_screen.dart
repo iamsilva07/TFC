@@ -64,6 +64,35 @@ class _DocumentsScreenState extends State<DocumentsScreen>{
             }
         }
     }
+    Future<void> _renameDocument(int id, String currentTitle) async {
+        final controller = TextEditingController(text: currentTitle);
+        final newTitle = await showDialog<String>(
+            context: context,
+            builder: (context) => AlertDialog(
+                title: const Text('Renombrar documento'),
+                content: TextField(
+                    controller: controller,
+                    decoration: const InputDecoration(labelText: 'Nuevo nombre'),
+                    autofocus: true,
+                ),
+                actions: [
+                    TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Cancelar'),
+                    ),
+                    TextButton(
+                        onPressed: () => Navigator.pop(context, controller.text),
+                        child: const Text('Guardar'),
+                    ),
+                ],
+            ),
+        );
+
+        if (newTitle != null && newTitle.isNotEmpty) {
+            await DocumentService.renameDocument(id, newTitle);
+            await _loadDocuments();
+        }
+    }
 
     @override
     Widget build(BuildContext context){
@@ -130,6 +159,10 @@ class _DocumentsScreenState extends State<DocumentsScreen>{
                                         IconButton(
                                             icon: const Icon(Icons.delete, color: Colors.red),
                                             onPressed: () => _deleteDocument(doc['id'])
+                                        ),
+                                        IconButton(
+                                            icon: const Icon(Icons.edit, color: Colors.blue),
+                                            onPressed: () => _renameDocument(doc['id'], doc['title']),
                                         ),
                                     ],
                                 )

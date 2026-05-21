@@ -109,4 +109,13 @@ class DocumentService{
         return {};
     }
 
+    static Future<bool> renameDocument(int id, String newTitle) async {
+        final headers = await _headers();
+        final response = await http.put(
+            Uri.parse('${Constants.baseUrl}/documents/$id'),
+            headers: headers,
+            body: jsonEncode({'title': newTitle}),
+        );
+        return response.statusCode == 200;
+    }
 }
