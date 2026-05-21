@@ -156,6 +156,16 @@ def rename_document(
     if not doc:
         raise HTTPException(status_code=404, detail="Documento no encontrado")
     doc.title = data.get("title", doc.title)
+    try:
+        collection = rag.get_collection(current_user.id)
+        results = collection.get(where={"doc_id": doc_id})
+        if results["ids"]:
+            collection.update(
+                ids=results["ids"],
+                metadatas=[{"doc_id": doc_id, "title": data.get("title", doc.title)} for _ in results["ids"]]
+            )
+        except Exception:
+            pass
     db.commit()
     db.refresh(doc)
     return doc

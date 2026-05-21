@@ -17,7 +17,7 @@ class ChatScreen extends StatefulWidget{
 
 class _ChatScreenState extends State<ChatScreen>{
     final _questionController = TextEditingController();
-    final List<Map<String, String>> _messages = [];
+    final List<Map<String, String?>> _messages = [];
     bool _isLoading = false;
 
     @override
@@ -43,6 +43,7 @@ class _ChatScreenState extends State<ChatScreen>{
             _messages.add({
                 'role': 'assistant',
                 'content': result['answer'] ?? 'Error al obtener respuesta',
+                'sources': (result['sources'] as List?)?.join(', ') ?? '',
             });
             _isLoading = false;
         });
@@ -113,11 +114,29 @@ class _ChatScreenState extends State<ChatScreen>{
                                                     ),
                                                 ),
                                             ),
-                                    ],
-                                );
-                            },
+                                        if (!isUser && message['sources'] != null && message['sources']!.isNotEmpty)
+                                            Padding(
+                                                padding: const EdgeInsets.only(left: 8, bottom: 8),
+                                                child: Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                        const Icon(Icons.description_outlined, size: 14, color: Colors.purple),
+                                                        const SizedBox(width: 4),
+                                                        Flexible(
+                                                            child: Text(
+                                                                'Fuente: ${message['sources']}',
+                                                                style: const TextStyle(fontSize: 12, color: Colors.purple),
+                                                                softWrap: true,
+                                                            ),
+                                                        ),
+                                                    ],
+                                                ),
+                                            ),
+                                        ],
+                                    );
+                                },
+                            ),
                         ),
-                    ),
                     if (_isLoading) const TypingIndicator(),
                     Padding(
                         padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
