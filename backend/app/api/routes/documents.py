@@ -64,6 +64,12 @@ def delete_document(
     if not doc:
         raise HTTPException(status_code=404, detail="Documento no encontrado")
     db.query(ChatMessage).filter(ChatMessage.document_id == doc_id).delete()
+    try:
+        collection = rag.get_collection(current_user.id)
+        collection.delete(where={"doc_id": doc_id})
+        collection.persist()
+    except Exception:
+        pass
     db.delete(doc)
     db.commit()
 
