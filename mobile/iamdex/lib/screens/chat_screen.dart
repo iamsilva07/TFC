@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/document_service.dart';
+import '../widgets/typing_indicator.dart';
 
 class ChatScreen extends StatefulWidget{
     final int docId;
@@ -22,6 +23,7 @@ class _ChatScreenState extends State<ChatScreen>{
     void initState() {
         super.initState();
         _loadPreviousMessages();
+
     }
 
     Future<void> _sendMessage() async{
@@ -95,11 +97,7 @@ class _ChatScreenState extends State<ChatScreen>{
                             },
                         ),
                     ),
-                    if(_isLoading)
-                        const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: CircularProgressIndicator(),
-                        ),
+                    if (_isLoading) const TypingIndicator(),
                     Padding(
                         padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
                         child: Row(
@@ -124,7 +122,7 @@ class _ChatScreenState extends State<ChatScreen>{
                     ),
                 ],
             ),
-            ),
+          ),
         );
     }
 }
