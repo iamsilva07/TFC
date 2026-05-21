@@ -12,6 +12,7 @@ class DocumentsScreen extends StatefulWidget{
 class _DocumentsScreenState extends State<DocumentsScreen>{
     List <dynamic> _documents = [];
     bool _isLoading = true;
+    String _searchQuery = '';
 
     @override
     void initState(){
@@ -67,15 +68,35 @@ class _DocumentsScreenState extends State<DocumentsScreen>{
     @override
     Widget build(BuildContext context){
         return Scaffold(
-            appBar: AppBar(title: const Text('Mis documentos')),
+            appBar: AppBar(
+                title: const Text('Mis documentos'),
+                bottom: PreferredSize(
+                    preferredSize: const Size.fromHeight(56),
+                    child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                        child: TextField(
+                            decoration: const InputDecoration(
+                                hintText: 'Buscar documento...',
+                                prefixIcon: Icon(Icons.search),
+                                filled: true,
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
+                                contentPadding: EdgeInsets.zero,
+                            ),
+                            onChanged: (value) => setState(() => _searchQuery = value.toLowerCase()),
+                        ),
+                    ),
+                ),
+            ),
             body: _isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : _documents.isEmpty
                     ? const Center(child: Text('No tienes documentos todavía'))
                     : ListView.builder(
-                        itemCount: _documents.length,
+                        itemCount: _documents.where((doc) => doc['title'].toString().toLowerCase().contains(_searchQuery)).length,
                         itemBuilder: (context, index){
-                            final doc =  _documents[index];
+                            final filtered = _documents.where((doc) => doc['title'].toString().toLowerCase().contains(_searchQuery)).toList();
+                            final doc = filtered[index];
                             return ListTile(
                                 leading: Icon(
                                     doc['file_type'] == 'pdf'
