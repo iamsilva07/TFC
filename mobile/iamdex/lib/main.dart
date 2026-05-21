@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:iamdex/screens/login_screen.dart';
 import 'package:iamdex/screens/home_screen.dart';
-import 'screens/onboarding_screen.dart';
 import 'package:iamdex/services/auth_service.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'utils/app_theme.dart';
+import 'screens/onboarding_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,17 +25,8 @@ class MyApp extends StatelessWidget{
     return MaterialApp(
       title: 'IAMDEX',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          brightness: Brightness.dark,
-        ),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
       home: !onboardingDone
           ? const OnboardingScreen()
