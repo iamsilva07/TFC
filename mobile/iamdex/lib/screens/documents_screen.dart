@@ -77,9 +77,20 @@ class _DocumentsScreenState extends State<DocumentsScreen>{
                         itemBuilder: (context, index){
                             final doc =  _documents[index];
                             return ListTile(
-                                leading: const Icon(Icons.description),
+                                leading: Icon(
+                                    doc['file_type'] == 'pdf'
+                                        ? Icons.picture_as_pdf
+                                        : doc['file_type'] == 'docx'
+                                            ? Icons.description
+                                            : Icons.text_snippet,
+                                    color: doc['file_type'] == 'pdf'
+                                        ? Colors.red
+                                        : doc['file_type'] == 'docx'
+                                            ? Colors.blue
+                                            : Colors.grey,
+                                ),
                                 title: Text(doc['title']),
-                                subtitle: Text(doc['file_type'] ?? ''),
+                                subtitle: Text(doc['created_at'].toString().substring(0, 10)),
                                 trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children:[
