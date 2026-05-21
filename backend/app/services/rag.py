@@ -44,6 +44,10 @@ def get_collection(user_id: int):
 
 def index_document(user_id: int, doc_id: int, text: str, title: str):
     collection = get_collection(user_id)
+    try:
+        collection.delete(where={"doc_id": doc_id})
+    except Exception:
+        pass
     chunks = chunk_text(text)
     collection.add(
         documents=chunks,
