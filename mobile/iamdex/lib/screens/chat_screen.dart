@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/document_service.dart';
 import '../widgets/typing_indicator.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ChatScreen extends StatefulWidget{
     final int docId;
@@ -74,25 +75,45 @@ class _ChatScreenState extends State<ChatScreen>{
                             itemBuilder: (context, index){
                                 final message = _messages[index];
                                 final isUser = message['role'] == 'user';
-                                return Align(
-                                    alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-                                    child: Container(
-                                        margin: const EdgeInsets.only(bottom: 12),
-                                        padding: const EdgeInsets.all(12),
-                                        constraints: BoxConstraints(
-                                            maxWidth: MediaQuery.of(context).size.width * 0.75,
-                                        ),
-                                        decoration: BoxDecoration(
-                                            color: isUser ? Colors.blue : Colors.grey[200],
-                                            borderRadius: BorderRadius.circular(12),
-                                        ),
-                                        child: Text(
-                                            message['content']!,
-                                            style: TextStyle(
-                                                color: isUser ? Colors.white : Colors.black,
+                                return Column(
+                                    crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                                    children: [
+                                        Align(
+                                            alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+                                            child: Container(
+                                                margin: const EdgeInsets.only(bottom: 4),
+                                                padding: const EdgeInsets.all(12),
+                                                constraints: BoxConstraints(
+                                                    maxWidth: MediaQuery.of(context).size.width * 0.75,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                    color: isUser ? Colors.purple : Colors.grey[200],
+                                                    borderRadius: BorderRadius.circular(12),
+                                                ),
+                                                child: Text(
+                                                    message['content']!,
+                                                    style: TextStyle(
+                                                        color: isUser ? Colors.white : Colors.black,
+                                                    ),
+                                                ),
                                             ),
                                         ),
-                                    ),
+                                        if (!isUser)
+                                            Padding(
+                                                padding: const EdgeInsets.only(left: 8, bottom: 8),
+                                                child: InkWell(
+                                                    onTap: () => Share.share(message['content']!),
+                                                    child: const Row(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                            Icon(Icons.share, size: 14, color: Colors.grey),
+                                                            SizedBox(width: 4),
+                                                            Text('Compartir', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                                                        ],
+                                                    ),
+                                                ),
+                                            ),
+                                    ],
                                 );
                             },
                         ),
