@@ -51,7 +51,7 @@ def index_document(user_id: int, doc_id: int, text: str, title: str):
     chunks = chunk_text(text)
     collection.add(
         documents=chunks,
-        ids=[f"doc_{doc_id}_chunk{i}" for i in range(len(chunks))],
+        ids=[f"doc_{doc_id}_chunk_{i}" for i in range(len(chunks))],
         metadatas=[{"doc_id": doc_id, "title": title} for _ in chunks]
     )
 
