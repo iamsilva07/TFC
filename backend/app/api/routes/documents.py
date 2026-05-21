@@ -164,8 +164,8 @@ def rename_document(
                 ids=results["ids"],
                 metadatas=[{"doc_id": doc_id, "title": data.get("title", doc.title)} for _ in results["ids"]]
             )
-        except Exception:
-            pass
+    except Exception:
+        pass
     db.commit()
     db.refresh(doc)
     return doc
