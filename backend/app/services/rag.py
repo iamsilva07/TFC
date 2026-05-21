@@ -60,13 +60,13 @@ def search_documents(user_id: int, question: str, doc_id: int | None = None, n_r
         n_results=8,
         where=where
     )
-    print(f"Sources found: {sources}")
+    
     if not results["documents"] or not results["documents"][0]:
         return "No encontré información relevante en los documentos", []
 
     context ="\n\n".join(results["documents"][0])
     sources = list({m["title"] for m in results["metadatas"][0]})
-    
+    print(f"Sources found: {sources}")
     return context, sources
 
 def ask(context: str, question: str) -> str:
