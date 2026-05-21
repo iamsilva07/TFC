@@ -13,6 +13,7 @@ class _DocumentsScreenState extends State<DocumentsScreen>{
     List <dynamic> _documents = [];
     bool _isLoading = true;
     String _searchQuery = '';
+    String _sortBy = 'date'; // 'date', 'name', 'type'
 
     @override
     void initState(){
@@ -25,6 +26,7 @@ class _DocumentsScreenState extends State<DocumentsScreen>{
         final docs = await DocumentService.getDocuments();
         setState((){
             _documents = docs;
+            _sortDocuments();
             _isLoading = false;
         });
     }
@@ -98,6 +100,20 @@ class _DocumentsScreenState extends State<DocumentsScreen>{
     Widget build(BuildContext context){
         return Scaffold(
             appBar: AppBar(
+                actions: [
+                    PopupMenuButton<String>(
+                        icon: const Icon(Icons.sort),
+                        onSelected: (value) {
+                            setState(() => _sortBy = value);
+                            _sortDocuments();
+                        },
+                        itemBuilder: (context) => [
+                            const PopupMenuItem(value: 'date', child: Text('Por fecha')),
+                            const PopupMenuItem(value: 'name', child: Text('Por nombre')),
+                            const PopupMenuItem(value: 'type', child: Text('Por tipo')),
+                        ],
+                    ),
+                ],
                 title: const Text('Mis documentos'),
                 bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(56),
@@ -174,5 +190,16 @@ class _DocumentsScreenState extends State<DocumentsScreen>{
                 child: const Icon(Icons.add),
             ),
         );
+    }
+    void _sortDocuments() {
+        setState(() {
+            if (_sortBy == 'name') {
+                _documents.sort((a, b) => a['title'].compareTo(b['title']));
+            } else if (_sortBy == 'type') {
+                _documents.sort((a, b) => (a['file_type'] ?? '').compareTo(b['file_type'] ?? ''));
+            } else {
+                _documents.sort((a, b) => b['created_at'].compareTo(a['created_at']));
+            }
+        });
     }
 }
