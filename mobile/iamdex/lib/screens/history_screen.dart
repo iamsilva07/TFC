@@ -94,6 +94,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                       final messages = _groupedHistory[docId]!;
                       final title = _docTitles[docId] ?? 'Documento $docId';
 
+                    
+
                       return Card(
                         margin: const EdgeInsets.only(bottom: 12),
                         child: ListTile(
@@ -146,6 +148,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     },
                 ),
             ),
-        ),
+        );
     }
 }
