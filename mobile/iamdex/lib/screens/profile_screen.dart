@@ -22,7 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       top: false,
       child: Scaffold(
         appBar: AppBar(title: const Text('Mi perfil')),
-        body: Padding(
+        body: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
