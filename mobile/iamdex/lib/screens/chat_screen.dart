@@ -19,6 +19,9 @@ class _ChatScreenState extends State<ChatScreen>{
     final _questionController = TextEditingController();
     final List<Map<String, String?>> _messages = [];
     bool _isLoading = false;
+    final _searchController = TextEditingController();
+    String _searchQuery = '';
+    bool _showSearch = false;
 
     @override
     void initState() {
@@ -66,16 +69,43 @@ class _ChatScreenState extends State<ChatScreen>{
             top: false,
             child: Scaffold (
             resizeToAvoidBottomInset: true,
-            appBar: AppBar(title: Text(widget.docTitle)),
+            appBar: AppBar(
+              title: Text(widget.docTitle),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () => setState(() => _showSearch = !_showSearch),
+                ),
+              ],
+            ),
             body: Column(
                 children:[
+                    if (_showSearch)
+                        Padding(
+                            padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+                            child: TextField(
+                                controller: _searchController,
+                                decoration: const InputDecoration(
+                                    hintText: 'Buscar en el chat...',
+                                    prefixIcon: Icon(Icons.search),
+                                    border: OutlineInputBorder(),
+                                ),
+                                onChanged: (value) => setState(() => _searchQuery = value.toLowerCase()),
+                            ),
+                        ),
                     Expanded(
                         child: ListView.builder(
                             padding: const EdgeInsets.all(16),
-                            itemCount: _messages.length,
-                            itemBuilder: (context, index){
-                                final message = _messages[index];
-                                final isUser = message['role'] == 'user';
+                            itemCount: _messages.where((m) => 
+                                _searchQuery.isEmpty || 
+                                m['content']!.toLowerCase().contains(_searchQuery)
+                            ).length,
+                            itemBuilder: (context, index) {
+                                final filtered = _messages.where((m) => 
+                                    _searchQuery.isEmpty || 
+                                    m['content']!.toLowerCase().contains(_searchQuery)
+                                ).toList();
+                                final message = filtered[index];
                                 return Column(
                                     crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                                     children: [

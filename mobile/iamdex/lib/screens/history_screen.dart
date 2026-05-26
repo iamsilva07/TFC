@@ -100,7 +100,38 @@ class _HistoryScreenState extends State<HistoryScreen> {
                           leading: const Icon(Icons.description, color: Colors.blue),
                           title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
                           subtitle: Text('${messages.length} pregunta(s)'),
-                          trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.delete_outline, color: Colors.red),
+                                onPressed: () async {
+                                  final confirm = await showDialog<bool>(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text('Eliminar conversación'),
+                                      content: const Text('¿Eliminar todos los mensajes de este documento?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context, false),
+                                          child: const Text('Cancelar'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context, true),
+                                          child: const Text('Eliminar', style: TextStyle(color: Colors.red)),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                  if (confirm == true) {
+                                    await DocumentService.deleteChatByDocument(docId);
+                                    await _loadHistory();
+                                  }
+                                },
+                              ),
+                              const Icon(Icons.arrow_forward_ios, size: 16),
+                            ],
+                          ),
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -113,8 +144,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         ),
                       );
                     },
-                  ),
-      ),
-    );
-  }
+                ),
+            ),
+        ),
+    }
 }

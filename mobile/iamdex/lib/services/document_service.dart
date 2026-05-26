@@ -118,4 +118,12 @@ class DocumentService{
         );
         return response.statusCode == 200;
     }
+    static Future<bool> deleteChatByDocument(int docId) async {
+        final headers = await _headers();
+        final response = await http.delete(
+            Uri.parse('${Constants.baseUrl}/documents/chat/history/document/$docId'),
+            headers: headers,
+        );
+        return response.statusCode == 204;
+    }
 }

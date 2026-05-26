@@ -164,3 +164,15 @@ def rename_document(
     db.commit()
     db.refresh(doc)
     return doc
+
+@router.delete("/chat/history/document/{doc_id}", status_code=204)
+def delete_chat_by_document(
+    doc_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    db.query(ChatMessage).filter(
+        ChatMessage.user_id == current_user.id,
+        ChatMessage.document_id == doc_id
+    ).delete()
+    db.commit()
