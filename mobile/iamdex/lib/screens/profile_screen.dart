@@ -96,13 +96,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
       newPassword: _newPasswordController.text.isEmpty ? null : _newPasswordController.text,
     );
 
-    if (result && _nameController.text.isNotEmpty) {
-      await AuthService.saveName(_nameController.text);
-    }
+    if (result) {
+      if (_nameController.text.isNotEmpty) {
+        await AuthService.saveName(_nameController.text);
+      }
 
-    setState(() {
-      _isLoading = false;
-      _message = result ? 'Cambios guardados correctamente' : 'Error al guardar los cambios';
-    });
+      if (_newPasswordController.text.isNotEmpty) {
+        await AuthService.logout();
+        if (mounted) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => const LoginScreen()),
+            (_) => false,
+          );
+          return;
+        }
+      }
+
+      setState(() {
+        _isLoading = false;
+        _message = 'Cambios guardados correctamente';
+      });
+    } else {
+      setState(() {
+        _isLoading = false;
+        _message = 'Error al guardar los cambios';
+      });
+    }
   }
 }
